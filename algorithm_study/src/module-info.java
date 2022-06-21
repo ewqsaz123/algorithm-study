@@ -1,0 +1,2 @@
+module algorithm_study {
+}
