@@ -1,0 +1,61 @@
+https://leetcode.com/problems/add-two-numbers/submissions/
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+import java.util.*;
+import java.math.BigInteger;
+
+
+class Solution {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        StringBuilder sb1 = new StringBuilder();
+        StringBuilder sb2 = new StringBuilder();
+        
+        Queue<ListNode> q1 = new LinkedList<>();
+        Queue<ListNode> q2 = new LinkedList<>();
+        q1.offer(l1); q2.offer(l2);
+        
+        while(!q1.isEmpty() || !q2.isEmpty()){
+            if(!q1.isEmpty()){
+                ListNode nowN = q1.poll();
+                sb1.append(Integer.toString(nowN.val));
+                if(nowN.next != null) q1.offer(nowN.next);
+             }
+            
+            if(!q2.isEmpty()){
+                ListNode nowN = q2.poll();
+                sb2.append(Integer.toString(nowN.val));
+                if(nowN.next != null) q2.offer(nowN.next);
+            }
+        }
+        sb1.reverse();
+        sb2.reverse();
+        
+        BigInteger bi1 = new BigInteger(sb1.toString());
+        BigInteger bi2 = new BigInteger(sb2.toString());
+        BigInteger total = bi1.add(bi2);
+        
+        StringBuilder rs = new StringBuilder(total.toString());
+        rs.reverse();
+        
+        Queue<ListNode> qrs = new LinkedList<>();
+        ListNode rsNode = new ListNode(Integer.parseInt(rs.substring(0,1)));
+        qrs.offer(rsNode);
+        for(int i=1; i<rs.length(); i++){
+            ListNode nextNode = new ListNode(Integer.parseInt(rs.substring(i,i+1)));
+            ListNode preNode = qrs.poll();
+            preNode.next = nextNode;
+            qrs.offer(nextNode);
+        }
+        
+        return rsNode;
+    }
+}
