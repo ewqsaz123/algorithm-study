@@ -1,0 +1,26 @@
+
+/*
+    풀이방식 : two pointer
+*/
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int answer = 0;
+        int start=0, end=0;
+        HashSet<String> set = new HashSet<>();
+        while(end < s.length()){
+            if(set.contains(s.substring(end, end+1))){  //단어 반복여부 확인
+                answer = answer < set.size()? set.size():answer;
+                set.remove(s.substring(start, start+1));
+                start++;
+            }else {
+                set.add(s.substring(end, end+1));
+                end++;
+            }
+            
+        }
+        
+        answer = answer < set.size()? set.size():answer;
+        
+        return answer;
+    }
+}
