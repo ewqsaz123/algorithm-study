@@ -1,0 +1,40 @@
+            
+            if(!time.containsKey(key)) time.put(key, total_min);
+            else time.replace(key, time.get(key)+total_min);
+            
+        }
+                
+        //money*min
+        for(int key: time.keySet()){
+            int total_money = 0;
+            int total_min = time.get(key);
+            
+            total_money += std_fee;
+            total_min   -= std_min;
+
+            if(total_min > 0){
+               total_money += (int)(Math.ceil((double)total_min/(double)unit_min))*unit_fee;
+            }
+                
+            total.put(key, total_money);
+        }
+        
+        int[] answer = new int[total.keySet().size()];
+        int i=0;
+        for(int key: total.keySet()){
+            answer[i++] = total.get(key);
+        }       
+        
+        return answer;
+    }
+    
+    public int calcMin(String in, String out, int car) throws ParseException{
+             
+        Date in_time = f.parse(in);
+        Date out_time = f.parse(out);
+                
+        int total_min = ((int)(out_time.getTime() - in_time.getTime()))/60000;
+        
+        return total_min;
+    }
+}
