@@ -1,3 +1,36 @@
+import java.util.*;
+import java.text.*;
+
+class Solution {
+    SimpleDateFormat f = new SimpleDateFormat("HH:mm");
+    public int[] solution(int[] fees, String[] records) throws ParseException {
+        int std_min = fees[0];
+        int std_fee = fees[1];
+        int unit_min = fees[2];
+        int unit_fee = fees[3];
+        
+        
+        HashMap<Integer, String> rec = new HashMap<>();//car number, in_time 
+        HashMap<Integer, Integer> time = new HashMap<>();//car number, min
+        TreeMap<Integer, Integer> total = new TreeMap<>();//car number, total money
+        
+        for(int i=0;i<records.length;i++){
+            String[] s = records[i].split(" ");
+            int car = Integer.parseInt(s[1]);
+            
+            if("IN".equals(s[2])){
+                rec.put(car, s[0]);
+            }else{//"OUT"
+                int total_min = calcMin(rec.get(car), s[0], car);
+                rec.remove(car);
+                
+                if(!time.containsKey(car)) time.put(car, total_min);
+                else time.replace(car, time.get(car)+total_min);
+            }
+        }
+        
+        for(int key: rec.keySet()){//23:59 out
+            int total_min = calcMin(rec.get(key), "23:59", key);
             
             if(!time.containsKey(key)) time.put(key, total_min);
             else time.replace(key, time.get(key)+total_min);
