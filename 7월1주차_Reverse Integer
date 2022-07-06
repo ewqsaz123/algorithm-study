@@ -1,0 +1,26 @@
+import java.math.*;
+
+class Solution {
+    public int reverse(int x) {
+        boolean isNegative = (x<0)?true:false;
+        
+        
+        StringBuilder sb = new StringBuilder(Integer.toString(x));
+        if(isNegative) {
+        	sb.replace(0, 1, "");//앞에 붙은 - 제거
+        	sb.append("-");  //-를 뒤에 붙여서 reverse 시 -가 앞으로 오게 함
+        }
+        sb.reverse();
+        
+        BigInteger bi = new BigInteger(sb.toString());  //reverse 한 string을 biginteger형으로 
+        BigInteger cmp_max= new BigInteger(Integer.toString(Integer.MAX_VALUE));
+        BigInteger cmp_min = new BigInteger(Integer.toString(Integer.MIN_VALUE));
+        
+        if(bi.compareTo(cmp_max) == 1) x = 0;
+        if(bi.compareTo(cmp_min) == -1) x = 0;
+        if(x != 0) x = bi.intValue();
+        
+     
+        return x;
+    }
+}
