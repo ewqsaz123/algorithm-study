@@ -1,0 +1,44 @@
+import java.util.*;
+
+class Solution {
+    public int solution(int n, int k) {
+        int answer = 0;
+        
+        String[] arr = changeN(n, k).split("0+");//진법 바꾼 후 0사이에 숫자들 추려내기
+        
+        for(int i=0; i<arr.length;i++){
+            if(isPrime(Long.parseLong(arr[i]))) answer++;
+        }
+        
+        
+        return answer;
+    }
+    
+    //진수바꾸기
+    public String changeN(int n, int k){
+        StringBuilder sb = new StringBuilder();
+        //몫이 1이 될 때까지 k로 나누기
+        //나머지 값들을 역순으로 정렬하기 위해 sb에 이어붙이기
+        while(n > 0){
+            int a = n / k;  //n을 k로 나눈 몫
+            int b = n % k;  //n을 k로 나눈 나머지
+            sb.append(Integer.toString(b));
+            n = a;
+        }
+        
+        return sb.reverse().toString();
+    }
+    
+    //소수인지 판별
+    public boolean isPrime(Long n){
+        if(n==1) return false;
+        if(n==2) return true;
+        
+        int limit = (int) Math.sqrt(n);
+        
+        for(int i=3;i<=limit;i++){
+            if(n%i == 0) return false;
+        }
+        return true;
+    }
+}
