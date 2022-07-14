@@ -1,0 +1,21 @@
+import java.util.*;
+
+class Solution {
+    public String solution(int n, int t, int m, int p) {
+        StringBuilder answer = new StringBuilder();
+        
+        StringBuilder sb = new StringBuilder(); //미리 구해놓을 숫자 배열.
+        int max_l = ((t-1)*m)+p;    //sb의 최소 문자열 길이. 튜브가 t개의 숫자를 말할때까지의 문자열갯수
+        int i = 0;
+        while(sb.length() < max_l){
+            sb.append(Integer.toString(i++, n));    //sb의 길이가 max_l 보다 커질 때까지 n진법으로 변환한 숫자를 이어붙임.            
+        }
+        
+        for(int j=0,k=p;j<t;j++){
+            answer.append(sb.substring(k-1, k).toUpperCase());  //j번째 턴의 k번째 숫자가 튜브가 말해야하는 숫자
+            k += m;                                             //다음턴에 말할 숫자는 (k+인원수)번째임.
+        }
+        
+        return answer.toString();
+    }
+}
