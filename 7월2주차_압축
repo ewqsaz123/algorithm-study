@@ -1,0 +1,40 @@
+import java.util.*;
+
+class Solution {
+    public int[] solution(String msg) {
+        List<Integer> answer= new ArrayList<>();
+	      
+        HashMap<String, Integer> dic = new HashMap<>();   //사전
+		int idx = 65;
+        while(idx <=90) {
+        	dic.put((char)idx+"", idx-64);        //사전셋팅
+        	idx++;
+        }
+        
+        idx = 27;                                            //27로 맞춤      
+        int max_l = 1; //사전에 들어있는 워드의 최대 길이. 초기값은 1.
+        
+        int k = 0;  //k번째에서 시작하는 문자열 찾기
+        while(k<msg.length()){
+            int max_tmp = 0;    //최대 문자열의 길이
+            
+            for(int i=1; i<=max_l; i++){//사전찾기
+                if(k+i <= msg.length() && dic.containsKey(msg.substring(k,k+i))) max_tmp = i;
+            }
+           
+            if(max_tmp > max_l) max_l = max_tmp;
+            answer.add(dic.get(msg.substring(k,k+max_tmp)));
+            
+            if(k+max_tmp<msg.length()-1){ //뒷글자 포함 워드 사전에 추가하기
+                dic.put(msg.substring(k, k+max_tmp+1), idx++); 
+                if(max_tmp+1 > max_l)  max_l = max_tmp+1;
+            }
+            k = k+max_tmp;
+        }
+        int[] arr = new int[answer.size()];
+        for(int i=0; i<answer.size();i++) arr[i] = answer.get(i);
+        
+        
+        return arr;
+    }
+}
