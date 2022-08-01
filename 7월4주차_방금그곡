@@ -1,0 +1,83 @@
+import java.util.*;
+
+class Solution {
+    public String solution(String m, String[] musicinfos) {
+        String answer = "(None)";
+        int maxMin = 0;
+        boolean isAnswered = false;
+
+        m = m.replaceAll("A#", "a");
+        m = m.replaceAll("C#", "c");
+        m = m.replaceAll("D#", "d");
+        m = m.replaceAll("F#", "f");
+        m = m.replaceAll("G#", "g");
+
+        for(int i=0; i<musicinfos.length; i++)
+        {
+            String[] music = musicinfos[i].split(",");
+            String name = music[2];
+            String melody = music[3];
+
+            melody = melody.replaceAll("A#", "a");
+            melody = melody.replaceAll("C#", "c");
+            melody = melody.replaceAll("D#", "d");
+            melody = melody.replaceAll("F#", "f");
+            melody = melody.replaceAll("G#", "g");
+
+            int hour = Integer.parseInt(musicinfos[i].substring(6,8))
+                     - Integer.parseInt(musicinfos[i].substring(0,2));
+            int min = Integer.parseInt(musicinfos[i].substring(9,11))
+                     - Integer.parseInt(musicinfos[i].substring(3,5));
+
+            int pt = hour * 60 + min;
+            if(pt < 0) pt *= -1;
+
+            isAnswered = checkMelody(m,melody, pt);
+           if(isAnswered)
+           {
+               if(pt > maxMin)
+               {
+                   maxMin = pt;
+                   answer = name;
+               }
+           }
+
+        }
+
+        return answer;
+    }
+
+    private boolean checkMelody(String music, String melody, int playTime)
+    {
+        int cnt =0;
+        StringBuilder sb = new StringBuilder();
+
+        if(melody.length() < playTime)
+        {
+            for(int i=0; i<playTime; i++)
+            {
+                if(i == melody.length()) i = 0;
+                sb.append(melody.substring(i,i+1));
+                cnt++;
+                if(cnt == playTime)
+                    break;
+            }    
+        }
+        else
+        {
+            for(int i=0; i<melody.length(); i++)
+            {
+                sb.append(melody.substring(i,i+1));
+            }   
+        }
+
+        if(sb.toString().contains(music))
+        {   
+            System.out.println("true");
+            return true;
+        }
+
+        return false;
+    }
+
+}
