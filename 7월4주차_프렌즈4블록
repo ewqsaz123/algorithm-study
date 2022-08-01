@@ -1,0 +1,60 @@
+public class Solution {
+    public int solution(int m, int n, String[] board) {
+        byte[][] b_board = new byte[m][n];
+        int temp = 0;
+        int result = 0;
+        for(int i = 0; i < m; i++)
+            b_board[i] = board[i].getBytes();
+
+
+        while((temp = deleteBlock(b_board, m, n)) > 0) {
+            result += temp;
+            gravity(b_board, m, n);
+        }
+
+        return result;
+    }
+
+    public int deleteBlock(byte[][] b_board, int m, int n){
+        byte[][] temp = new byte[m][n];
+        int result = 0;
+        for(int y = 0; y < m-1; y++)
+            for(int x = 0; x < n-1; x++){
+                if(b_board[y][x] == b_board[y][x+1]
+                        && b_board[y][x+1] == b_board[y+1][x]
+                        && b_board[y+1][x] == b_board[y+1][x+1]
+                        && b_board[y+1][x+1] != ' ') {
+                    temp[y][x] = 1;
+                    temp[y][x+1] = 1;
+                    temp[y+1][x] = 1;
+                    temp[y+1][x+1] = 1;
+                }
+            }
+        for(int y = 0; y < m; y++)
+            for(int x = 0; x < n; x++)
+                if(temp[y][x] == 1){
+                    b_board[y][x] = ' ';
+                    result++;
+                }
+        return result;
+    }
+
+    public void gravity(byte[][] b_board, int m, int n){
+        byte[][] temp = new byte[m][n];
+        for(int x = 0; x < n; x++){
+            int index = m-1;
+            for(int y = m-1; y >= 0; y--) {
+                for (;index >= 0 && b_board[index][x] == ' '; index--) ;
+                if (index >= 0)
+                    temp[y][x] = b_board[index--][x];
+                else
+                    temp[y][x] = ' ';
+            }
+        }
+        for(int y = 0; y < m; y++)
+            for(int x = 0; x < n; x++)
+                b_board[y][x] = temp[y][x];
+    }
+
+
+}
