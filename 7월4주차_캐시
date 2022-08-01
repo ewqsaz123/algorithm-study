@@ -1,0 +1,43 @@
+import java.util.*;
+
+class Solution {
+
+    private int maxSize;
+    private Set<String> cache;
+
+    public int solution(int maxSize, String[] cities) {
+        this.maxSize = maxSize;
+        this.cache = (maxSize > 0)? new LinkedHashSet<>() : null;
+        return Arrays.stream(cities)
+                    .map(city-> city.toLowerCase())
+                    .mapToInt(this::queryCost)
+                    .sum();
+    }
+
+    private int queryCost(String key) {    
+        if (cache == null)
+            return 5;
+
+        if (cache.contains(key)) {
+            touchItem(key);
+            return 1;
+        }
+
+        if (cache.size() == maxSize) 
+            removeLRU();
+        cache.add(key);
+        return 5;
+    }
+
+    private void removeLRU() {
+        for (String item : cache) {
+            cache.remove(item); // LRU item
+            break;
+        }
+    }
+
+    private void touchItem(String key) {
+        cache.remove(key);
+        cache.add(key);
+    }
+}
