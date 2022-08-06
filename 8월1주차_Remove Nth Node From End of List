@@ -1,0 +1,38 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ArrayList<ListNode> arr = new ArrayList<>();
+        ListNode node = head;
+        arr.add(node);
+        while(node.next != null){
+            node = node.next;
+            arr.add(node);
+        }
+        
+        int sz = arr.size();
+        if(sz == 1){
+            return null;
+        }else{
+            int de = sz - n;    //삭제하려는 인덱스
+            int pre_de = de-1;
+                
+            if(pre_de == -1){//헤드를 삭제 시
+                head = head.next;
+            }else{
+                ListNode pre_node = arr.get(pre_de);
+                ListNode del_node = arr.get(de);
+                pre_node.next = del_node.next;
+            }
+        }
+        return head;
+    }
+}
