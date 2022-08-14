@@ -2,8 +2,6 @@ import java.util.*;
 
 class Solution {
     public int[] solution(String s) {
-        int max_l = 0;
-        int max_i = -1;
         s = s.substring(2,s.length()-2);
         String[] sts = s.split("[}],[{]");
        ArrayList[] arr = new ArrayList[sts.length+1];
