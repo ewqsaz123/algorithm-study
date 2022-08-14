@@ -1,0 +1,27 @@
+import java.util.*;
+
+class Solution {
+    public int[] solution(String s) {
+        int max_l = 0;
+        int max_i = -1;
+        s = s.substring(2,s.length()-2);
+        String[] sts = s.split("[}],[{]");
+       ArrayList[] arr = new ArrayList[sts.length+1];
+        for(int i=0; i<sts.length;i++){
+            String[] tmp = sts[i].split(",");
+            arr[tmp.length] = new ArrayList<String>(Arrays.asList(tmp));
+         }
+        ArrayList<Integer> answer = new ArrayList<>();
+        for(int i=1;i<arr.length;i++){
+            ArrayList<String> tmp = arr[i];
+            for(int j=0;j<tmp.size();j++)
+                if(!answer.contains(Integer.parseInt(tmp.get(j)))){
+                    answer.add(Integer.parseInt(tmp.get(j)));
+                    break;
+                }
+         }
+        
+        
+        return answer.stream().mapToInt(i->i).toArray();
+    }
+}
