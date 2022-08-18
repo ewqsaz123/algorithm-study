@@ -1,0 +1,24 @@
+import java.util.*;
+import java.math.*;
+
+class Solution {
+    public int divide(int dividend, int divisor) {
+        
+        BigInteger d1 = new BigInteger(Integer.toString(dividend));
+        BigInteger d2 = new BigInteger(Integer.toString(divisor));
+        BigInteger d3 = d1.divide(d2);
+        
+        BigInteger maxValue = new BigInteger(Integer.toString(Integer.MAX_VALUE));
+        BigInteger minValue = new BigInteger(Integer.toString(Integer.MIN_VALUE));
+        
+        int answer = 0;
+        if(d3.compareTo(maxValue) == 1) answer = maxValue.intValue();
+        else if(d3.compareTo(minValue) == -1) answer = minValue.intValue();
+        else answer = d3.intValue();
+        
+        return answer;
+        
+    }
+    
+  
+}
