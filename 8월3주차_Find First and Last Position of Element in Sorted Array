@@ -1,0 +1,18 @@
+import java.util.*;
+import java.util.stream.*;
+
+class Solution {
+    public int[] searchRange(int[] nums, int target) {
+        List<Integer> arr = Arrays.stream(nums).boxed().collect(Collectors.toList());
+        int[] answer = new int[2];
+        if(arr.contains(target)){
+            answer[0] = arr.indexOf(target);
+            answer[1] = arr.lastIndexOf(target);
+        }else{
+            answer[0] = -1;
+            answer[1] = -1;
+        }
+        
+        return answer;
+    }
+}
