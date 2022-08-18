@@ -1,0 +1,15 @@
+import java.util.*;
+import java.util.stream.*;
+
+class Solution {
+    public int search(int[] nums, int target) {
+        
+        List<Integer> arr = Arrays.stream(nums).boxed().collect(Collectors.toList());
+        
+        int answer = -1;
+        if(arr.contains(target)){
+            answer = arr.indexOf(target);
+        }
+        return answer;
+    }
+}
