@@ -1,0 +1,105 @@
+import java.util.*;
+/* 01:47 */ 
+
+class Solution {
+    static TreeSet<Long> tr = new TreeSet<>();
+    static TreeSet<Integer> idx = new TreeSet<>();
+    static ArrayList<String> op_list = new ArrayList<>();      
+    public long solution(String expression) {
+        long answer = 0;
+        //String op_list = "-+*";
+        
+       
+        //수식에 포함된 연산자 체크
+        if(expression.contains("-")) op_list.add("-");
+        if(expression.contains("+")) op_list.add("+");
+        if(expression.contains("*")) op_list.add("*");
+        
+        //만들수있는 경우의 수 다 만들어서 fx 실행
+        for(int i=0; i<op_list.size(); i++){
+            String s = op_list.get(i);
+            if(op_list.size() > 1){
+                for(int j=0;j<op_list.size();j++){
+                    if(j == i) continue;
+                    s += op_list.get(j);
+                    if(op_list.size() > 2){
+                        for(int k=0;k<op_list.size();k++){
+                            if(k == i || k== j) continue;
+                            s += op_list.get(k);                            
+                            fx(s, expression);
+                            s = s.replace(op_list.get(k), "");
+                        }
+                    }else fx(s, expression);
+                    s = s.replace(op_list.get(j), "");
+                }
+            }else fx(s, expression);
+        }
+        
+        answer = tr.last();
+        return answer;
+    }
+    
+    
+    public static void fx(String s, String expression){
+        // - * + 
+        
+        for(int i=0;i<s.length();i++){
+            String target = s.substring(i,i+1);	//우선순위에 따라 선택된 연산자 "-", "+", "*"s
+            //System.out.println(target);
+            while(expression.contains(target)){
+                int op_i = expression.indexOf(target); //target연산자 있는 곳 위치 탐색
+                int l_i = -1, r_i = -1;        //양쪽 숫자의 시작 또는 끝 인데스를 저장할 변수
+                
+                int l=op_i-1, r=op_i+1;//탐색에 사용할 포인터
+                
+                //target 왼쪽, 오른쪽 숫자 위치 탐색
+                while(l_i == -1 && l>-1){
+                   if(op_list.contains(expression.substring(l, l+1)))l_i = l+1;
+                
+                    l--;
+                }
+                if(l_i == -1) l_i = 0;
+                
+                while(r_i == -1 && r < expression.length()){
+                    if(op_list.contains(expression.substring(r,r+1))) r_i = r;
+                    r++;
+                }
+                if(r_i == -1) r_i = expression.length();
+                
+                
+                
+                long l_num = 0;
+                if(expression.substring(l_i, op_i).contains("!")) l_num = -1 * Long.parseLong(expression.substring(l_i, op_i).replace("!",""));//왼쪽 숫자
+                else l_num = Long.parseLong(expression.substring(l_i, op_i));//왼쪽 숫자
+                
+                long r_num = 0;
+                if(expression.substring(op_i+1, r_i).contains("!"))r_num = -1 * Long.parseLong(expression.substring(op_i+1, r_i).replace("!",""));
+                else r_num = Long.parseLong(expression.substring(op_i+1, r_i));//오른쪽 숫자
+                
+                long rs_num = 0;
+                switch(target){
+                    case "-":
+                        rs_num = l_num - r_num;
+                        break;
+                    case "+":
+                        rs_num = l_num + r_num;
+                        break;
+                    case "*":
+                        rs_num = l_num * r_num;
+                        break;
+                }
+                
+                if(rs_num >= 0) expression = expression.replace(expression.substring(l_i, r_i), rs_num+"");
+                else expression = expression.replace(expression.substring(l_i, r_i), "!"+Math.abs(rs_num));//음수일 땐 !로 구분값추가 
+                
+                
+            }
+            
+            
+        }//--for end
+        tr.add(Math.abs(Long.parseLong(expression.replaceAll("!", ""))));
+    }
+    
+    
+    
+}
