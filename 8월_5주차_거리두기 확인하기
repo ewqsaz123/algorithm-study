@@ -1,0 +1,100 @@
+import java.util.*;
+
+class Solution {
+    int true_cnt = 0;
+    public int[] solution(String[][] places) {
+        int[] answer = new int[places.length];
+        
+        for(int i=0; i<places.length ;i++){
+            boolean rs = false;
+           //System.out.println("!!!"+i+"번 대기실");
+            for(int j=0; j<places[i].length; j++){
+                String deagi = places[i][j]; //i번 대기실의 j번째 줄
+                int fromidx = 0;      
+                true_cnt = 0;
+                while(deagi.length() > fromidx && deagi.indexOf("P", fromidx) > -1){
+                    int x = j;//몇행
+                    int y = deagi.indexOf("P", fromidx);//몇열
+                    
+                    partition(places[i],  x, y, 0, false, "", x, y);
+                    if(true_cnt > 0){
+                        rs = true;
+                        break;
+                    }                    
+                    fromidx++;    
+                }
+                if(rs) break;            
+            }
+            if(rs){
+                    answer[i] = 0; //거리두기 안지켰을 때
+                }else{
+                    answer[i] = 1; //거리두기 지켰을 때
+                }
+        }
+        
+        
+        return answer;
+    }
+    
+    //분할하여 탐색할 함수
+    public boolean partition(String[] places_t, int x, int y, int distance, boolean diagonal, String his, int org_x, int org_y){
+        his += "->"+ x+","+y;
+        //System.out.println("현재 history"+his+"/"+ distance +"/"+ places_t[x].substring(y,y+1) );
+        if(distance == 0){
+            if(x-1 >= 0 && y-1 >= 0) partition(places_t, x-1, y-1, distance+1, true, his, org_x, org_y);
+            if(x-1 >= 0)  partition(places_t, x-1, y, distance+1, false, his, org_x, org_y);
+            if(x-1 >= 0 && y+1 < 5) partition(places_t, x-1, y+1, distance+1, true,his, org_x, org_y);
+            if(y+1 < 5) partition(places_t, x, y+1, distance+1, false, his, org_x, org_y);
+            if(x+1 < 5 && y+1 < 5) partition(places_t, x+1, y+1, distance+1, true, his, org_x, org_y);
+            if(x+1 < 5) partition(places_t, x+1, y, distance+1, false, his, org_x, org_y);
+            if(x+1 < 5 && y-1 >= 0) partition(places_t, x+1, y-1, distance+1, true, his, org_x, org_y);
+            if(y-1 >= 0) partition(places_t, x, y-1, distance+1, false, his, org_x, org_y);            
+        }else if(distance == 1){
+           if(places_t[x].substring(y,y+1).equals("P") && !(x == org_x && y == org_y)) {
+               
+               if(diagonal){//대각선일때 양옆이 파티션으로 막혀있는지 확인
+                   if(org_x-1 == x && org_y-1 == y){
+                       if(places_t[org_x-1].substring(org_y).equals("X") && places_t[org_x].substring(org_y-1).equals("X")){
+                           
+                           return false;
+                       }
+                   }else if(org_x-1 == x && org_y+1 == y){
+                       if(places_t[org_x-1].substring(org_y).equals("X") && places_t[org_x].substring(org_y+1).equals("X")){
+                           
+                           return false;
+                       }
+                   }else if(org_x+1 == x && org_y+1 == y){
+                       if(places_t[org_x].substring(org_y+1).equals("X") && places_t[org_x+1].substring(org_y).equals("X")){
+                           return false;
+                       }
+                   }else if(org_x+1 == x && org_y-1 == y){
+                       if(places_t[org_x+1].substring(org_y).equals("X") && places_t[org_x].substring(org_y-1).equals("X")){
+                           return false;
+                       }
+                   }
+                       
+               }else {
+                   true_cnt++;
+                   return true;
+               }
+               
+           }else if(places_t[x].substring(y,y+1).equals("O")){
+                if(!diagonal){
+                    if(x-1 >= 0)  partition(places_t, x-1, y, distance+1, false, his, org_x, org_y);
+                    if(y+1 < 5) partition(places_t, x, y+1, distance+1, false, his, org_x, org_y);
+                    if(x+1 < 5) partition(places_t, x+1, y, distance+1, false, his, org_x, org_y);
+                    if(y-1 >= 0) partition(places_t, x, y-1, distance+1, false, his, org_x, org_y);  
+                }
+            }else {
+               return false;
+           }
+        }else if(distance == 2){//2           
+            if(places_t[x].substring(y,y+1).equals("P")&& !(x == org_x && y == org_y)) {
+                true_cnt++;
+                return true;
+            }
+        }
+        
+        return false;
+    }
+}
