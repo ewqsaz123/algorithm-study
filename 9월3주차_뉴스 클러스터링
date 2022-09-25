@@ -1,0 +1,78 @@
+import java.util.*;
+
+
+class Solution {
+    public int solution(String str1, String str2) {
+        int answer = 0;
+        
+        /* 문자 쌍 만들기 */
+        List<String> a1 = makeA(str1.toUpperCase());
+        List<String> a2 = makeA(str2.toUpperCase());
+        
+    
+        /* 교집합 찾기 */
+        List<String> kyo = new ArrayList<>();
+        List<String> l = new ArrayList<>();
+        List<String> g = new ArrayList<>();
+        if(a1.size() > a2.size()){
+            l.addAll(a2);
+            g.addAll(a1);
+        }else{
+            l.addAll(a1);
+            g.addAll(a2);
+        }
+        
+        int l_i = 0, g_i = 0;
+        
+        while(l_i < l.size() && g_i<g.size()){
+            //System.out.println(l_i + ", "+ g_i);
+            if(l.get(l_i).equals(g.get(g_i))){
+                kyo.add(l.get(l_i++)); g_i++;
+            }else{
+                if(l.get(l_i).compareTo(g.get(g_i)) < 0) l_i++;//사전순으로 앞이면
+                    else g_i++;                                  //사전순으로 뒤이면
+            }
+        }
+        
+        /* 합집합 찾기 */
+        Set<String> set = new HashSet<>();
+        set.addAll(a1); set.addAll(a2);
+        int size = set.size();
+        System.out.println(set.toString());
+        
+        Iterator<String> it = set.iterator();
+        while(it.hasNext()){
+            String its = it.next();
+            int a = 0, b=0;
+            if(a1.contains(its))
+            {
+                a = a1.lastIndexOf(its) - a1.indexOf(its);
+            }    
+            
+            if(a2.contains(its)){
+                 b = a2.lastIndexOf(its) - a2.indexOf(its);
+            }
+            if(a>b) size += a;
+            else size += b;
+            
+        }
+        
+        if(kyo.size()  == 0 && size == 0) answer = 65536;
+        else answer = (int)(((double)kyo.size()/(double)size)*65536);
+        
+        return answer;
+    }
+    
+    public List<String> makeA(String str){
+        List<String> arr = new ArrayList<String>();
+        
+        for(int i=0; i<str.length()-1; i++){
+            String s = str.substring(i, i+2);
+            if(s.replaceAll("[^a-zA-Z]", "").length() < 2) continue;
+            arr.add(s);
+        }
+        Collections.sort(arr);
+        return arr;
+    }
+    
+}
