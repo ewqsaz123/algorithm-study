@@ -1,0 +1,48 @@
+/* https://school.programmers.co.kr/learn/courses/30/lessons/76502 */
+
+import java.util.*;
+
+class Solution {
+    public int solution(String s) {
+        int answer = 0;
+        
+        String n_str = s;
+        /* 회전한 문자열 만들기. 총 length-1 만큼 회전 */
+        for(int i=0; i<s.length(); i++){
+            n_str = s.substring(i+1, s.length()) + s.substring(0,i+1);
+            
+            if(isValid(n_str)) answer++;
+            
+        }
+        
+            
+        return answer;
+    }
+    
+    /* 올바른 괄호인지 판단 */
+    public boolean isValid(String s){
+       // System.out.println("****"+s+" 시작");
+        
+        HashMap<Character, Character> map = new HashMap<>();
+        
+        map.put('(', ')'); map.put('[', ']'); map.put('{', '}');
+               
+        Stack<Character> left = new Stack<>();
+        for(int i=0; i<s.length(); i++){
+            char c = s.charAt(i);
+            //System.out.println("----"+c+"-----");
+            if(map.containsKey(c)){//열린괄호면 스택에 넣음
+                left.push(c);
+                //System.out.println("왼괄호 넣음, left="+ left);
+            }else if(!left.empty()){
+                char l = left.peek();
+                //System.out.println("l="+l+", c = "+c);
+                if(map.get(l) == c) left.pop(); 
+               // System.out.println("left="+left);
+            }else return false;
+        }   
+        //System.out.println("s = "+s +", "+ left);
+        
+        return left.empty();
+    }
+}
