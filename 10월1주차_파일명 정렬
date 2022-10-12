@@ -1,0 +1,64 @@
+/* 못품... 다시 풀어야지 */
+
+import java.util.*;
+import java.util.regex.*;
+
+class Solution {
+    public String[] solution(String[] files) {
+        String[] answer = new String[files.length];
+        
+        /* 문자(head) 부분 찾아서 treemap에 담아 정렬하기 */
+        Pattern p = Pattern.compile("[^0-9]+");
+        ArrayList<MT<String, String>> list1 = new ArrayList<>();
+        
+        for(String s: files){
+            Matcher m = p.matcher(s);
+            int c = 0;
+            while(m.find()){
+                c++;
+                //System.out.println(m.group()+", "+s);
+                list1.add(new MT(m.group().toLowerCase(), s));
+                if(c>0) break;
+            }
+            
+        }
+        
+        Collections.sort(list1, (o1, o2)-> o1.key.compareToIgnoreCase(o2.key));
+        
+        
+       // System.out.println(list1);
+        /* 숫자(number) 부분 찾아서 treemap에 담아 정렬하기 */
+        ArrayList<MT<Integer, String>> list2 = new ArrayList<>();
+        p = Pattern.compile("[0-9]+");
+        for(MT mt: list1){
+            System.out.println(mt.key+", "+ mt.value);
+            Matcher m = p.matcher(String.valueOf(mt.value));
+            int c = 0;
+            while(m.find()){
+                c++;
+                //System.out.println(m.group()+","+ entry.getValue());
+                //n_map.put(Integer.parseInt(m.group()), entry.getValue());
+                list2.add(new MT(Integer.parseInt(m.group()), String.valueOf(mt.value)));
+                if(c>0) break;
+            }
+        }
+        Collections.sort(list2, (o1, o2)->o1.key - o2.key);
+        for(int i=0; i<list2.size();i++){
+            answer[i] = String.valueOf(list2.get(i).value);
+        }
+        
+        return answer;
+    }
+}
+
+class MT<K, V> {
+  public K key;
+  public V value;
+
+  public MT(K key, V value){
+    this.key = key;
+    this.value = value;
+  }
+    
+ 
+}
