@@ -1,0 +1,69 @@
+import java.util.*;
+
+class Solution {
+    public String solution(String p) {
+        
+        String answer  = "";
+        if(isCorrect(p)) answer = p;
+         else answer = rc(p);
+      
+        return answer;
+    }
+    
+    public String rc(String p){
+        if(p.length() == 0) return p;
+        String[] uv = divUV(p);//0=u, 1=v
+        if(isCorrect(uv[0])) {
+            return uv[0]+rc(uv[1]);
+        }
+        else{
+            String e = "(" + rc(uv[1]) + ")";
+            String c = "";
+            if(uv[0].length() > 2) c = uv[0].substring(1,uv[0].length()-1);
+            
+            if(c.length() == 0) return e + c;
+            
+            for(char ch: c.toCharArray()){
+                if(ch == '(') e += ')';
+                else e += '(';
+            }
+            return e;
+        }
+    }
+    
+    //u, v로 나눔
+    public String[] divUV(String p){
+        int l = 0;//왼괄호 개수
+        int r = 0;//오괄호 개수
+        
+        for(int i=0;i<p.length();i++){
+            char c = p.charAt(i);
+            if(c == '(') l++;
+            else r++;
+            
+            if(l == r) break;
+        }
+        
+        String[] uv = {p.substring(0, l+r), p.substring(l+r)};
+        
+        return uv;
+    }
+    
+    //올바른지 확인
+    public boolean isCorrect(String p){
+        Stack<Character> st = new Stack<>();
+        
+        for(int i=0;i<p.length();i++){
+            char c = p.charAt(i);
+            if(c == '(') st.push(c);
+            else{
+                if(!st.isEmpty())st.pop();
+                else return false;
+            }
+        }
+        
+       return st.isEmpty();
+    }
+    
+    
+}
