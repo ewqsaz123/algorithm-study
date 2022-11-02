@@ -1,0 +1,46 @@
+import java.util.*;
+
+class Solution {
+    public int[][] merge(int[][] intervals) {
+        List<int[]> list = new ArrayList<>();
+        PriorityQueue<int[]> pq = new PriorityQueue<>((a,b)->a[0] - b[0]);
+        for(int i=0;i<intervals.length;i++){
+            pq.add(new int[]{intervals[i][0],intervals[i][1]});
+        }
+          
+        int max_s = -1;
+        int max_e = -1;
+        
+        while(!pq.isEmpty()){
+            int[] p = pq.poll();
+            int s = p[0];
+            int e = p[1];
+            
+            if(max_s == -1 && max_e == -1){
+                max_s = s;
+                max_e = e;
+                
+            }else{
+                if(max_e >= s){//겹칠 때
+                 max_e = (max_e < e)? e: max_e;
+                }else{          //안 겹칠 때 : 이전꺼 요소 넣고 max_i 값 바꿈
+                    list.add(new int[]{max_s, max_e});
+
+                    max_s = s;
+                    max_e = e;
+                }
+            }
+            
+            //마지막은 무조건 넣음
+            if(pq.isEmpty()) list.add(new int[]{max_s, max_e});
+        }
+        
+        int[][] answer = new int[list.size()][2];
+        
+        for(int i=0;i<list.size();i++){
+            answer[i][0] = list.get(i)[0];
+            answer[i][1] = list.get(i)[1];
+        }
+        return answer;
+    }
+}
