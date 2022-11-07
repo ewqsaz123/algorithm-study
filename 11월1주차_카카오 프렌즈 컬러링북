@@ -1,0 +1,51 @@
+import java.util.*; 
+class Solution {
+    int[][] move = {{-1,0},{0,1}, {1,0},{0,-1}};
+    public int[] solution(int m, int n, int[][] picture) {
+        int numberOfArea = 0;
+        int maxSizeOfOneArea = 0;
+        int[][] visit = new int[m][n];
+        
+        for(int i=0;i<m;i++){
+            for(int j=0; j<n; j++){
+                if(picture[i][j] != 0 && visit[i][j] == 0){
+                    numberOfArea++;
+                    int w = bfs(picture, visit, i, j, 0, picture[i][j]);
+                    if(maxSizeOfOneArea<w) maxSizeOfOneArea = w;
+                }
+            }
+        }
+
+        int[] answer = new int[2];
+        answer[0] = numberOfArea;
+        answer[1] = maxSizeOfOneArea;
+        return answer;
+    }
+    
+    public int bfs(int[][] picture, int[][] visit, int a, int b, int w, int c){
+        Queue<int[]> q = new LinkedList<>();
+        q.offer(new int[]{a,b});
+        while(!q.isEmpty()){
+            
+            int[] arr = q.poll();
+            int na = arr[0], nb = arr[1];
+            if(visit[na][nb] == 0) visit[na][nb] = 1;
+            else continue;
+            w++;
+            
+            for(int i=0; i<move.length;i++){
+                int ma = move[i][0] + na;
+                int mb = move[i][1] + nb;
+                if(ma>=0 && ma<picture.length && mb>=0 && mb<picture[0].length){
+                    if(visit[ma][mb] == 0 && picture[ma][mb] == c){
+                        q.offer(new int[]{ma,mb});
+                    }
+                }
+            }
+            
+        }
+        return w;
+    }
+    
+    
+}
