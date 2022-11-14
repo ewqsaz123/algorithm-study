@@ -1,0 +1,32 @@
+import java.util.*;
+
+class Solution {
+    public int[] solution(int n, String[] words) {
+        int[] answer = new int[]{0,0};
+
+        Set<String> set = new HashSet<>();//중복여부 확인할 set
+        String pre_s = words[0];
+        set.add(pre_s);
+        
+        for(int i=1;i<words.length;i++){
+            String s = words[i];
+            if((pre_s.charAt(pre_s.length()-1) != s.charAt(0))|| set.contains(s)){
+                //끝말 틀렸으면
+                answer[0] = (i+1)%n;
+                if(answer[0] == 0){
+                    answer[0] = n;
+                    answer[1] = ((i+1)/n);
+                }else{
+                    answer[1] = ((i+1)/n) + 1;
+                }
+                break;
+            }else{
+                //끝말 맞으면
+                pre_s = s;
+                set.add(pre_s);
+            }
+        }
+
+        return answer;
+    }
+}
