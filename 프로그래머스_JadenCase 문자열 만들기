@@ -1,0 +1,29 @@
+class Solution {
+    public String solution(String st) {
+        StringBuffer answer = new StringBuffer();
+        
+        char pre_c = ' ';
+        for(int i=0;i<st.length();i++){
+            char c = st.charAt(i);
+            
+            if(c == 32){//공백
+                answer.append(" ");
+                pre_c = c;
+            }else{
+                String s = c +"";
+                if(pre_c == ' '){//첫문자
+                    if(c > 57){
+                        s = s.toUpperCase();
+                    }
+                }else{
+                    s = s.toLowerCase();
+                }
+                answer.append(s);
+                pre_c = c;
+            }
+            
+        }//--for end
+        
+        return answer.toString();
+    }
+}
