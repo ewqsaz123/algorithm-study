@@ -1,0 +1,26 @@
+import java.util.*;
+class Solution {
+    
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> answer = new ArrayList<List<Integer>>();
+        answer.add(new ArrayList<Integer>());//빈배열 넣기
+        
+        for(int i=0;i<nums.length;i++){
+            fn(i, nums, new ArrayList<Integer>(), answer);
+        } 
+        
+        return answer;
+    }
+    
+    public void fn(int a, int[] nums, List<Integer> arr, List<List<Integer>> answer){
+        List<Integer> n_arr = new ArrayList<>();    //이미 answer에 들어가있는 arr이 영향 가지않기위해 새로 만듦
+        n_arr.addAll(arr);
+        n_arr.add(nums[a]);
+        answer.add(n_arr);
+        
+        for(int i=a+1; i<nums.length;i++){
+            fn(i, nums, n_arr, answer);
+        }
+        
+    }
+}
