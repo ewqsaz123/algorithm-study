@@ -1,0 +1,43 @@
+https://www.hackerrank.com/challenges/ctci-comparator-sorting/problem?h_r=internal-search&isFullScreen=true
+
+import java.io.*;
+import java.util.*;
+
+public class Solution {
+
+    public static void main(String[] args) {
+        /* Enter your code here. Read input from STDIN. Print output to STDOUT. Your class should be named Solution. */
+        
+        Scanner sc = new Scanner(System.in);
+        int n = Integer.parseInt(sc.nextLine());
+        List<Item> arr = new ArrayList<>();
+        for(int i=0; i<n; i++){
+            String st = sc.nextLine();
+            String[] s = st.strip().split(" ");
+            Item it = new Item(s[0], Integer.parseInt(s[1]));
+            arr.add(it);
+        }
+        Collections.sort(arr, new Checker());
+        
+        arr.stream().forEach((Item i)->System.out.println(i.name +" "+i.score));
+        
+    }
+}
+
+class Checker implements Comparator<Item>{
+    @Override 
+    public int compare(Item i1, Item i2){
+        if(i1.score != i2.score) return i2.score-i1.score;
+        else return i1.name.compareTo(i2.name);
+    }
+}
+
+class Item {
+    String name;
+    int score;
+    
+    public Item(String name, int score){
+        this.name= name;
+        this.score = score;
+    }
+}
