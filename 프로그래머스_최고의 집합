@@ -1,0 +1,21 @@
+class Solution {
+    public int[] solution(int n, int s) {
+        
+        
+        if(n>s) return new int[] {-1};
+        
+        /* 1씩 균등하게 배분한다고 했을 때 넣을 수 있는 최대수를 기본적으로 채워놓음 */
+        int fill = s/n; 
+        int[] answer = new int[n];
+        for(int i=0; i<n;i++) answer[i] = fill;
+        
+        for(int i=0; i<s%n; i++){
+            answer[n-i-1]++;
+        }
+        
+        
+        return answer;
+        
+        
+    }
+}
