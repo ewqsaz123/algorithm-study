@@ -1,0 +1,29 @@
+class Solution {
+    public int solution(String skill, String[] skill_trees) {
+        int answer = 0;
+        
+        for(String s: skill_trees){
+            int pre = -1;//이전 선행 스킬트리
+            boolean isValid = true;
+            String c_skill = skill;
+            for(int i=0; i<s.length();i++){
+                if(skill.indexOf(Character.toString(s.charAt(i))) != -1){//선행스킬에 포함일때
+                    int idx = skill.indexOf(Character.toString(s.charAt(i)));
+                    if(pre < idx && pre+1 == idx) {
+                       pre=idx;
+                    }
+                    else {
+                        isValid = false;
+                        break;
+                    }
+                }
+            }
+            if(isValid) {
+                //System.out.println(s);
+                answer++;
+            }
+        }
+        
+        return answer;
+    }
+}
